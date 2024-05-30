@@ -1,0 +1,81 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './styles.css';
+
+function AverageCalculator() {
+  const [numberId, setNumberId] = useState('');
+  const [prevState, setPrevState] = useState([]);
+  const [currState, setCurrState] = useState([]);
+  const [numbers, setNumbers] = useState([]);
+  const [average, setAverage] = useState(null);
+
+  useEffect(() => {
+    fetchNumbers(); // Fetch data initially when component mounts
+  }, []);
+
+  const fetchNumbers = async () => {
+    try {
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzE3MDc1NjQ4LCJpYXQiOjE3MTcwNzUzNDgsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6ImM5Y2ExMTQ4LTc4NjgtNGY1MC04YTgxLTE2NTc5NGJmNDFiNyIsInN1YiI6InNoeWJhc2hzaGFpa0BnbWFpbC5jb20ifSwiY29tcGFueU5hbWUiOiJnb01hcnQiLCJjbGllbnRJRCI6ImM5Y2ExMTQ4LTc4NjgtNGY1MC04YTgxLTE2NTc5NGJmNDFiNyIsImNsaWVudFNlY3JldCI6ImJ1YXVLSHJyd2tkRWRKTGMiLCJvd25lck5hbWUiOiJTaHliYXNoIiwib3duZXJFbWFpbCI6InNoeWJhc2hzaGFpa0BnbWFpbC5jb20iLCJyb2xsTm8iOiIyMmJkNWEwNTM4In0.LTOBTDbPDxwUPLpKqcjV1aGlzfybzE4nFIPhCjD4FK8";
+      const response = await axios.get(http://20.244.56.144./test/primes/e, {
+        headers: {
+          Authorization: Bearer ${token}
+        }
+      });
+      const { windowPrevState, windowCurrState, numbers, avg } = response.data;
+      setPrevState(windowPrevState);
+      setCurrState(windowCurrState);
+      setNumbers(numbers);
+      setAverage(avg);
+    } catch (error) {
+      console.error('Error fetching numbers:', error);
+    }
+  };
+
+  return (
+    <div className="average-calculator">
+      <input
+        type="text"
+        value={numberId}
+        onChange={(e) => setNumberId(e.target.value)}
+        placeholder="Enter number ID"
+      />
+      <button onClick={fetchNumbers}>Fetch Numbers</button>
+
+      <div>
+        <h3>Previous Window State:</h3>
+        <ul>
+          {prevState.map((num, index) => (
+            <li key={index}>{num}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3>Current Window State:</h3>
+        <ul>
+          {currState.map((num, index) => (
+            <li key={index}>{num}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3>Numbers Received:</h3>
+        <ul>
+          {numbers.map((num, index) => (
+            <li key={index}>{num}</li>
+          ))}
+        </ul>
+      </div>
+
+      {average && (
+        <div>
+          <h3>Average:</h3>
+          <p>{average.toFixed(2)}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default AverageCalculator;
